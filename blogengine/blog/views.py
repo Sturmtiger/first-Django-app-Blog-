@@ -10,6 +10,8 @@ from .forms import TagForm, PostForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin  # ограничение доступа
 from django.core.paginator import Paginator
+
+from django.db.models import Q
 # Create your views here.
 
 def posts_list(request):
@@ -19,8 +21,15 @@ def posts_list(request):
 
    # # return render(request, 'blog/index.html', context={'posts': posts})
 
-    posts = Post.objects.all()
+    search_query = request.GET.get('search', '')
+    if search_query:
+        posts = Post.objects.filter(Q(title__icontains=search_query) | Q(body__icontains=search_query))
+    else:
+        posts = Post.objects.all()
+
     paginator = Paginator(posts, 2)
+
+
     page_number = request.GET.get('page', 1)  # 2-й аргумент опционально(на случай, если страница не найдена, будет - 1)
     page = paginator.get_page(page_number)
 
@@ -82,7 +91,7 @@ class PostCreate(LoginRequiredMixin, ObjectCreateMixin, View):
 class PostUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
     model = Post
     model_form = PostForm
-    template = 'blog/tag_update_form.html'
+    template = 'blog/post_update_form.html'
     raise_exception = True
 
 class PostDelete(LoginRequiredMixin, ObjectDeleteMixin, View):

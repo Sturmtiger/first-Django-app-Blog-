@@ -1,7 +1,7 @@
 {% extends 'blog/base_blog.html' %}
 
 {% block title %}
-    Edit tag "{{ tag.title|title}}" - {{ block.super }}
+    Edit Tag "{{ tag.title|title}}" - {{ block.super }}
 {% endblock %}
 
 {% block content %}
@@ -24,6 +24,7 @@
         <!--{{ form.title }}-->
         <!--{{ form.slug }}-->
 
+        <a href="{{ tag.get_absolute_url }}">Cancel</a>
         <button type="submit" class="btn btn-dark">Update Tag</button>
     </form>
 {% endblock %}

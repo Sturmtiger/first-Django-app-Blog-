@@ -5,21 +5,23 @@
 {% endblock %}
 
 {% block content %}
-    <form action="{% url 'post_update_url' %}" method="post">
+    <form action="{{ post.get_update_url }}" method="post">
         {% csrf_token %}
 
         {% for field in form %}
             <div class="form-group">
                 {% if field.errors %}
-                <div class="alert alert-danger">
-                    {{ field.errors }}
-                </div>
+                    <div class="alert alert-danger">
+                        {{ field.errors }}
+                    </div>
                 {% endif %}
 
                 {{ field.label }}
                 {{ field }}
             </div>
         {% endfor %}
+
+        <a href="{{ post.get_absolute_url }}">Cancel</a>
         <button type="submit" class="btn btn-dark">Update post</button>
     </form>
 
